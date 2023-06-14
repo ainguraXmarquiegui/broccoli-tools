@@ -19,9 +19,10 @@ LOCAL_FILE="/path/to/your-file.gz"
 # Extract the year and month from the current date
 YEAR=$(date -u +"%Y")
 MONTH=$(date -u +"%m")
+DAY=$(date -u +"%d")
 
 # Set the object key dynamically
-OBJECT_KEY="${YEAR}/${MONTH}/${DATE}.gz"
+OBJECT_KEY="${YEAR}/${MONTH}/${DAY}.gz"
 
 # Generate the signature for the request
 SIGNATURE=$(printf "PUT\n\napplication/x-gzip\n${DATE}\nx-amz-acl:private\n/${BRIDGE_IDENTIFIER}/${OBJECT_KEY}" | \
@@ -35,3 +36,4 @@ curl -X PUT -T "${LOCAL_FILE}" \
   -H "x-amz-acl: private" \
   -H "Authorization: AWS ${AWS_ACCESS_KEY_ID}:${SIGNATURE}" \
   "https://${BRIDGE_IDENTIFIER}.s3.${REGION}.amazonaws.com/${OBJECT_KEY}"
+
